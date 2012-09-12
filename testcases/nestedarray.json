@@ -1,0 +1,6 @@
+{
+	"val": "1",
+	"val2": ["2", ["test","test2"], "3"],
+	"test3": "test4"
+	"test32": { "array3": ["array3_i1","array3_i2"] }
+}
