@@ -39,45 +39,42 @@ public:
     enum JsonValType {
         List = 0,
         Array = 1,
-        Num = 2,
-        Str = 3,
-        Bool = 4,
-        Null = 5
+        Variant = 2
     };
 
     explicit QtFastJsonObject(QtFastJsonObject *parent = 0,QVariant key = "", bool isFJO = true);
     explicit QtFastJsonObject(QObject *parent = 0,QVariant key = "");
     inline QtFastJsonObject* jsonParent() { return myParent; }
 
-    inline QtFastJsonObject* at(const QString key) { return childItems->value(key); }
-    inline QtFastJsonObject* at(const int key) { return childItems->value(QString::number(key)); }
+    inline QtFastJsonObject* at(const QVariant key) { return childItems->value(key.toString()); }
 
     inline QVariant key() { return myKey; }
     inline void setKey(QVariant newKey) { myKey = newKey; }
 
-    inline void insertChild(QString key, QtFastJsonObject* object) { childItems->insert(key,object); }
-    inline void insertChild(int key, QtFastJsonObject* object) { childItems->insert(QString::number(key),object); }
+    /* Creates and adds a child item and then returns it. */
+    QtFastJsonObject* addChild(QVariant key, QVariant value = "");
 
-    inline void removeChild(QString key) { childItems->remove(key); }
-    inline void removeChild(int key) { childItems->remove(QString::number(key)); }
-    inline void removeChild(QtFastJsonObject* object) { childItems->remove(childItems->key(object)); }
+    void removeChild(QVariant key);
+    void removeChild(QtFastJsonObject* object);
 
-    inline QList<QtFastJsonObject*> getChildItems() { return childItems->values(); }
-    /* TODO: The above returns the items in a sorted manner, NOT the inserted manner. */
+    inline QList<QtFastJsonObject*> getChildItems() { return childItems_ordOfIns; }
 
     inline int childCount() { return childItems->size(); }
 
-    inline void setVariantValue(QVariant value) { myVariantValue = value; }
-    inline QVariant variant() { return myVariantValue; }
-
+    /* The JsonValType indicates what type the value is: an array, map, or string. */
     inline JsonValType type() { return myValType; }
     inline void setType(JsonValType newType) { myValType = newType; }
 
+    /* These simply call variantValue.to...() and are only here for convenience */
     inline QString toStr() { return myVariantValue.toString(); }
     inline int toInt() { return myVariantValue.toInt(); }
 
+    inline QVariant variant() { return myVariantValue; }
+    inline void setVariantValue(QVariant value) { myVariantValue = value; }
+
 private:
     QHash<QString,QtFastJsonObject*>* childItems;
+    QList<QtFastJsonObject*> childItems_ordOfIns;
 
     QVariant myKey;
     QVariant myVariantValue;

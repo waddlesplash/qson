@@ -80,10 +80,8 @@ bool QtFastJsonDoc::parser_lexer()
             else if(reading == "array")
             { newObj_Key = curParent->childCount(); }
 
-            QtFastJsonObject* newCurParent = new QtFastJsonObject(curParent,newObj_Key,true);
-            newCurParent->setType(List);
-            curParent->insertChild(newObj_Key.toString(),newCurParent);
-            curParent = newCurParent;
+            curParent = curParent->addChild(newObj_Key);
+            curParent->setType(List);
             newObj_Key = "";
 
             reading = "key";
@@ -114,10 +112,8 @@ bool QtFastJsonDoc::parser_lexer()
             if(reading == "array")
             { newObj_Key = QString::number(curParent->childCount()); }
 
-            QtFastJsonObject* newCurParent = new QtFastJsonObject(curParent,newObj_Key,true);
-            newCurParent->setType(Array);
-            curParent->insertChild(newObj_Key.toString(),newCurParent);
-            curParent = newCurParent;
+            curParent = curParent->addChild(newObj_Key);
+            curParent->setType(Array);
             newObj_Key = "";
 
             reading = "array";
@@ -143,10 +139,8 @@ bool QtFastJsonDoc::parser_lexer()
             if((reading == "value") && (jsonDat.mid(json_loc,4) == "true"))
             {
                 newObj_Val = true;
-                newObj = new QtFastJsonObject(curParent,newObj_Key,true);
-                newObj->setVariantValue(newObj_Val);
-                newObj->setType(Bool);
-                curParent->insertChild(newObj_Key.toString(),newObj);
+                newObj = curParent->addChild(newObj_Key,newObj_Val);
+                newObj->setType(Variant);
                 json_loc += 3;
 
                 reading = "key";
@@ -160,10 +154,8 @@ bool QtFastJsonDoc::parser_lexer()
             if((reading == "value") && (jsonDat.mid(json_loc,5) == "false"))
             {
                 newObj_Val = false;
-                newObj = new QtFastJsonObject(curParent,newObj_Key,true);
-                newObj->setVariantValue(newObj_Val);
-                newObj->setType(Bool);
-                curParent->insertChild(newObj_Key.toString(),newObj);
+                newObj = curParent->addChild(newObj_Key,newObj_Val);
+                newObj->setType(Variant);
                 json_loc += 4;
 
                 reading = "key";
@@ -177,10 +169,8 @@ bool QtFastJsonDoc::parser_lexer()
             if((reading == "value") && (jsonDat.mid(json_loc,4) == "null"))
             {
                 QVariant nullVariant(QVariant::String);
-                newObj = new QtFastJsonObject(curParent,newObj_Key,true);
-                newObj->setVariantValue(nullVariant);
-                newObj->setType(Null);
-                curParent->insertChild(newObj_Key.toString(),newObj);
+                newObj = curParent->addChild(newObj_Key,nullVariant);
+                newObj->setType(Variant);
                 json_loc += 3;
 
                 reading = "key";
@@ -193,10 +183,8 @@ bool QtFastJsonDoc::parser_lexer()
             if(reading == "value")
             {
                 newObj_Val = parser_readStr();
-                newObj = new QtFastJsonObject(curParent,newObj_Key,true);
-                newObj->setVariantValue(newObj_Val);
-                newObj->setType(Str);
-                curParent->insertChild(newObj_Key.toString(),newObj);
+                newObj = curParent->addChild(newObj_Key,newObj_Val);
+                newObj->setType(Variant);
 
                 reading = "key";
                 newObj_Key = "";
@@ -209,10 +197,8 @@ bool QtFastJsonDoc::parser_lexer()
             else if(reading == "array")
             {
                 QString newArrayVal = parser_readStr();
-                newObj->setType(Str);
-                newObj = new QtFastJsonObject(curParent,QString::number(curParent->childCount()),true);
-                newObj->setVariantValue(newArrayVal);
-                curParent->insertChild(curParent->childCount(),newObj);
+                newObj = curParent->addChild(curParent->childCount(),newArrayVal);
+                newObj->setType(Variant);
             }
 
             break;
@@ -225,10 +211,8 @@ bool QtFastJsonDoc::parser_lexer()
             if(json_curChar.isDigit() && (reading == "value"))
             {
                 newObj_Val = parser_readNum();
-                newObj = new QtFastJsonObject(curParent,newObj_Key,true);
-                newObj->setType(Num);
-                newObj->setVariantValue(newObj_Val);
-                curParent->insertChild(newObj_Key.toString(),newObj);
+                newObj = curParent->addChild(newObj_Key,newObj_Val);
+                newObj->setType(Variant);
 
                 reading = "key";
                 newObj_Key = "";
@@ -237,10 +221,8 @@ bool QtFastJsonDoc::parser_lexer()
             else if(json_curChar.isDigit() && (reading == "array"))
             {
                 QVariant newArrayVal = parser_readNum();
-                newObj = new QtFastJsonObject(curParent,QString::number(curParent->childCount()),true);
-                newObj->setType(Num);
-                newObj->setVariantValue(newArrayVal);
-                curParent->insertChild(curParent->childCount(),newObj);
+                newObj = curParent->addChild(curParent->childCount(),newArrayVal);
+                newObj->setType(Variant);
             }
             break;
         }
