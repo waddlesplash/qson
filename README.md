@@ -26,6 +26,7 @@ In order to read the following JSON...
 	int length = result["indent"].toMap()["length"].toInt();
 </pre>
 but if you use QtFastJson you only have to do the following:
+<pre>
 	QtFastJsonDoc* jsonDoc = new QtFastJsonDoc();
     jsonDoc->readJSON("json_file.json",true); // Returns a bool of OK.
     int length = jsonDoc->at("indent")->at("length")->toInt();
