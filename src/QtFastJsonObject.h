@@ -62,7 +62,7 @@ public:
     inline void removeChild(int key) { childItems->remove(QString::number(key)); }
     inline void removeChild(QtFastJsonObject* object) { childItems->remove(childItems->key(object)); }
 
-    inline QList<QtFastJsonObject*> getChildItems() { return childItems_ordOfIns; }
+    inline QList<QtFastJsonObject*> getChildItems() { return childItems->values(); }
     /* TODO: The above returns the items in a sorted manner, NOT the inserted manner. */
 
     inline int childCount() { return childItems->size(); }
