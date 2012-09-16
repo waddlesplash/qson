@@ -1,32 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Qt Fast JSON by waddlesplash</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Qt Fast JSON : Fast and simple JSON manipulation in Qt." />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>Qt Fast JSON</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Qt Fast JSON</h1>
-        <p>Fast and simple JSON manipulation in Qt.</p>
-        <p class="view"><a href="https://github.com/waddlesplash/qtfastjson">View the Project on GitHub <small>waddlesplash/qtfastjson</small></a></p>
-        <ul>
-          <li><a href="https://github.com/waddlesplash/qtfastjson/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/waddlesplash/qtfastjson/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/waddlesplash/qtfastjson">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/waddlesplash/qtfastjson">View on GitHub</a>
+
+          <h1 id="project_title">Qt Fast JSON</h1>
+          <h2 id="project_tagline">Fast and simple JSON manipulation in Qt.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/waddlesplash/qtfastjson/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/waddlesplash/qtfastjson/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <p>A fast way to manipulate JSON data from Qt under the MIT license.
 Currently, it only <em>reads</em> JSON.</p>
 
@@ -36,41 +40,43 @@ Please report any bugs!</p>
 <p>Parsing JSON in Qt previously had to be done using QJson or a C/C++ JSON library.
 In order to read the following JSON...</p>
 
-<pre>
-    {
-       "encoding" : "UTF-8",
-       "plug-ins" : [
-           "python",
-           "c++",
-           "ruby"
-          ],
-       "indent" : { "length" : 3, "use_space" : true }
-    }
-</pre>
+<div class="highlight"><pre><span class="p">{</span>
+<span class="nt">"encoding"</span> <span class="p">:</span> <span class="s2">"UTF-8"</span><span class="p">,</span>
+<span class="nt">"plug-ins"</span> <span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"python"</span><span class="p">,</span>
+    <span class="s2">"c++"</span><span class="p">,</span>
+    <span class="s2">"ruby"</span>
+    <span class="p">],</span>
+<span class="nt">"indent"</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">"length"</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nt">"use_space"</span> <span class="p">:</span> <span class="kc">true</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 
 <p>...while using QJson, you would have to do something like this at the least:</p>
 
-<pre>
-    QJson::Parser parser;
-    bool* ok;
-    QVariantMap result = parser.parse("{ ...jsondata... }", &amp;ok).toMap();
-    int length = result["indent"].toMap()["length"].toInt();
-</pre>
+<div class="highlight"><pre><span class="n">QJson</span><span class="o">::</span><span class="n">Parser</span> <span class="n">parser</span><span class="p">;</span>
+<span class="kt">bool</span><span class="o">*</span> <span class="n">ok</span><span class="p">;</span>
+<span class="n">QVariantMap</span> <span class="n">result</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"{ ...jsondata... }"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ok</span><span class="p">).</span><span class="n">toMap</span><span class="p">();</span>
+<span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">"indent"</span><span class="p">].</span><span class="n">toMap</span><span class="p">()[</span><span class="s">"length"</span><span class="p">].</span><span class="n">toInt</span><span class="p">();</span>
+</pre></div>
 
 <p>but if you use QtFastJson you only have to do the following:</p>
 
-<pre>
-    QtFastJsonDoc* jsonDoc = new QtFastJsonDoc();
-    jsonDoc-&gt;readJSON("json_file.json",true); // Returns a bool of OK.
-    int length = jsonDoc-&gt;at("indent")-&gt;at("length")-&gt;toInt();
-</pre>
+<div class="highlight"><pre><span class="n">QtFastJsonDoc</span><span class="o">*</span> <span class="n">jsonDoc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QtFastJsonDoc</span><span class="p">();</span>
+<span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">readJSON</span><span class="p">(</span><span class="s">"json_file.json"</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span> <span class="c1">// Returns a bool of how it made out.</span>
+<span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"indent"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"length"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">toInt</span><span class="p">();</span>
+</pre></div>
       </section>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/waddlesplash">waddlesplash</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Qt Fast JSON maintained by <a href="https://github.com/waddlesplash">waddlesplash</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
     
+
   </body>
 </html>
