@@ -1,6 +1,7 @@
+#Qt Fast JSON
 A fast way to manipulate JSON data from Qt under the MIT license.
 Currently, it only *reads* JSON.
-#Qt Fast JSON
+
 This is still in alpha stage, so don't use it without testing it first.
 Please report any bugs!
 
