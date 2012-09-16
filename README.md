@@ -31,4 +31,3 @@ but if you use QtFastJson you only have to do the following:
     jsonDoc->readJSON("json_file.json",true); // Returns a bool of OK.
     int length = jsonDoc->at("indent")->at("length")->toInt();
 </pre>
-I intend to add support for using [] instead of ->at() soon.
