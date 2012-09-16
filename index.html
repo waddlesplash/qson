@@ -31,14 +31,20 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>A fast way to manipulate JSON data from Qt under the MIT license.
+        <h2>What's this?</h2>
+
+<p>A fast way to manipulate <a href="http://www.json.org/">JSON</a> data from <a href="http://qt-project.org/">Qt</a> under the <a href="https://github.com/waddlesplash/qtfastjson/blob/master/LICENSE.txt">MIT license</a>.
 Currently, it only <em>reads</em> JSON.</p>
 
-<p>This is still in alpha stage, so don't use it without testing it first.
-Please report any bugs!</p>
+<h2>Why is this any better than <a href="http://qjson.sourceforge.net/">QJson</a>?</h2>
 
-<p>Parsing JSON in Qt previously had to be done using QJson or a C/C++ JSON library.
-In order to read the following JSON...</p>
+<p>Because QJson's parser is about 1,700 lines of code (including ~1,100 lines of <a href="http://www.gnu.org/software/bison/">Bison</a>-generated code).</p>
+
+<p>Mine is just about 260 lines of code, created by hand.</p>
+
+<h2>Is the API different?</h2>
+
+<p>Yes it is, but not by much. To read the following JSON...</p>
 
 <div class="highlight"><pre><span class="p">{</span>
 <span class="nt">"encoding"</span> <span class="p">:</span> <span class="s2">"UTF-8"</span><span class="p">,</span>
@@ -62,7 +68,7 @@ In order to read the following JSON...</p>
 <p>but if you use QtFastJson you only have to do the following:</p>
 
 <div class="highlight"><pre><span class="n">QtFastJsonDoc</span><span class="o">*</span> <span class="n">jsonDoc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QtFastJsonDoc</span><span class="p">();</span>
-<span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">readJSON</span><span class="p">(</span><span class="s">"json_file.json"</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span> <span class="c1">// Returns a bool of how it made out.</span>
+<span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">readJSON</span><span class="p">(</span><span class="s">"json_file.json"</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"indent"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"length"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">toInt</span><span class="p">();</span>
 </pre></div>
       </section>
