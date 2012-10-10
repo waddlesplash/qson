@@ -24,8 +24,6 @@
  *
 */
 
-#include <QLocale>
-#include <QCoreApplication>
 #include "QtFastJson.h"
 
 QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
