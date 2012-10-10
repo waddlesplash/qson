@@ -25,7 +25,6 @@
 */
 
 #include <QtFastJson.h>
-#include <QFile>
 #include <QCoreApplication>
 
 int main(int argc, char* argv[])
@@ -33,19 +32,11 @@ int main(int argc, char* argv[])
     QCoreApplication app(argc,argv);
 
     QtFastJsonDoc* jsonDoc = new QtFastJsonDoc();
-    QFile f(app.applicationDirPath() + "/../../testcases/qjson_example.json");
-    f.open(QFile::ReadOnly);
 
-    if(jsonDoc->readJSON(&f))
-    {
-        qDebug("I read a file properly!");
-        f.close();
-    }
+    if(jsonDoc->readFile(app.applicationDirPath() + "/../../testcases/qjson_example.json"))
+    { qDebug("I read a JSON file properly!"); }
     else
-    {
-        return -1;
-        f.close();
-    }
+    { return -1; }
 
     return 0;
 }

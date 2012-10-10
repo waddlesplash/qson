@@ -24,6 +24,7 @@
  *
 */
 
+#include <QFile>
 #include "QtFastJson.h"
 
 QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
@@ -33,6 +34,16 @@ QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
     json_loc = 0;
     json_length = 0;
     jsonDat = "";
+}
+
+bool QtFastJsonDoc::readFile(const QString filepath)
+{
+    QFile f(filepath);
+    if(!f.exists()) { return false; }
+    if(!f.open(QFile::ReadOnly)) { return false; }
+    bool result = readJSON(f.readAll());
+    f.close();
+    return result;
 }
 
 bool QtFastJsonDoc::readJSON(QIODevice* device)

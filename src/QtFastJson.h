@@ -37,6 +37,7 @@ class QtFastJsonDoc : public QtFastJsonObject
     Q_OBJECT
 public:
     explicit QtFastJsonDoc(QObject *parent = 0);
+    bool readFile(const QString filepath);
     bool readJSON(QIODevice *device);
     bool readJSON(const QString data);
 
