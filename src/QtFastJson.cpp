@@ -29,6 +29,10 @@
 QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
     QtFastJsonObject(parent)
 {
+    json_curChar = ' ';
+    json_loc = 0;
+    json_length = 0;
+    jsonDat = "";
 }
 
 bool QtFastJsonDoc::readJSON(QIODevice* device)
