@@ -68,7 +68,7 @@ Currently, it only <em>reads</em> JSON.</p>
 <p>but if you use QtFastJson you only have to do the following:</p>
 
 <div class="highlight"><pre><span class="n">QtFastJsonDoc</span><span class="o">*</span> <span class="n">jsonDoc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QtFastJsonDoc</span><span class="p">();</span>
-<span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">readJSON</span><span class="p">(</span><span class="s">"json_file.json"</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+<span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">readFile</span><span class="p">(</span><span class="s">"json_file.json"</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"indent"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"length"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">toInt</span><span class="p">();</span>
 </pre></div>
       </section>
