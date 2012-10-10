@@ -24,7 +24,6 @@
  *
 */
 
-#include <QFile>
 #include <QLocale>
 #include <QCoreApplication>
 #include "QtFastJson.h"
@@ -34,17 +33,15 @@ QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
 {
 }
 
-bool QtFastJsonDoc::readJSON(QString fileName,bool isFile)
+bool QtFastJsonDoc::readJSON(QIODevice* device)
 {
-    if(!isFile) { return false; }
-
-    QFile* file = new QFile(fileName);
-    if(!file->exists()) { return false; }
-    if(!file->open(QFile::ReadOnly)) { return false; }
-    QString data = file->readAll();
-    file->close();
-
-    return readJSON(data);
+    QIODevice::OpenMode o = device->openMode();
+    if((o == QIODevice::ReadOnly) || (o == QIODevice::ReadWrite))
+    {
+        QString data = device->readAll();
+        return readJSON(data);
+    }
+    return false;
 }
 
 bool QtFastJsonDoc::readJSON(const QString data)

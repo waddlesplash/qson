@@ -29,6 +29,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QIODevice>
 #include "QtFastJsonObject.h"
 
 class QtFastJsonDoc : public QtFastJsonObject
@@ -36,7 +37,7 @@ class QtFastJsonDoc : public QtFastJsonObject
     Q_OBJECT
 public:
     explicit QtFastJsonDoc(QObject *parent = 0);
-    bool readJSON(QString fileName, bool isFile);
+    bool readJSON(QIODevice *device);
     bool readJSON(const QString data);
 
 private:
