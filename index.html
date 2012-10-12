@@ -38,11 +38,13 @@ Currently, it only <em>reads</em> JSON.</p>
 
 <h2>Why is this any better than <a href="http://qjson.sourceforge.net/">QJson</a>?</h2>
 
-<p>Because QJson's parser is about 1,700 lines of code (including ~1,100 lines of <a href="http://www.gnu.org/software/bison/">Bison</a>-generated code).</p>
+<p>Because QJson has about ~2,200 lines of code (including ~960 lines of <a href="http://www.gnu.org/software/bison/">Bison</a>-generated code).</p>
 
-<p>Mine is just about 260 lines of code, created by hand.</p>
+<p>Mine has just about 480 lines of code, created by hand.</p>
 
-<h2>Is the API different?</h2>
+<p>(Th lines of code were counted by running <a href="http://cloc.sourceforge.net/">CLOC</a> on the source directories of the projects.)</p>
+
+<h2>Is the API different than QJson's API?</h2>
 
 <p>Yes it is, but not by much. To read the following JSON...</p>
 
@@ -71,6 +73,16 @@ Currently, it only <em>reads</em> JSON.</p>
 <span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">readFile</span><span class="p">(</span><span class="s">"json_file.json"</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"indent"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="s">"length"</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">toInt</span><span class="p">();</span>
 </pre></div>
+
+<p>Writing a document is just as easy:</p>
+
+<div class="highlight"><pre><span class="n">QtFastJsonDoc</span><span class="o">*</span> <span class="n">jsonDoc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QtFastJsonDoc</span><span class="p">();</span>
+<span class="cm">/* ... do something here to add stuff to the doc ... */</span>
+<span class="n">QString</span> <span class="n">json</span> <span class="o">=</span> <span class="n">jsonDoc</span><span class="o">-&gt;</span><span class="n">writeJSON</span><span class="p">();</span>
+
+</pre></div>
+
+<p>You could also call <code>writeFile("filename")</code> to write output to a file instead of returning it.</p>
       </section>
     </div>
 
