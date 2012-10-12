@@ -1,9 +1,6 @@
 #Qt Fast JSON
 A fast way to manipulate JSON data from Qt under the MIT license.
-Currently, it only *reads* JSON.
+Both reading and writing are supported, but autoformatting the output is not.
 
-This is still in alpha stage, so don't use it without testing it first.
-Please report any bugs!
-
-There are some advantages to using QtFastJSON over QJson, but the greatest is the LOC count (~1,700 for the QJson parser, ~260 for the QtFastJSON parser).
-See all the details at the [QtFastJSON webpage](http://waddlesplash.github.com/qtfastjson/).
+There are some minor advantages to using QtFastJSON over QJson, but the greatest is the size of the codebase (QJson has ~2,200 LOC, QtFastJson has ~480).
+See all the details and some examples at the [QtFastJSON webpage](http://waddlesplash.github.com/qtfastjson/).

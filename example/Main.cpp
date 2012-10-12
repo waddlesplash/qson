@@ -34,7 +34,10 @@ int main(int argc, char* argv[])
     QtFastJsonDoc* jsonDoc = new QtFastJsonDoc();
 
     if(jsonDoc->readFile(app.applicationDirPath() + "/../../testcases/qjson_example.json"))
-    { qDebug("I read a JSON file properly!"); }
+    {
+        qDebug("I read a JSON file properly!");
+        qDebug(jsonDoc->writeJSON().toUtf8().constData());
+    }
     else
     { return -1; }
 

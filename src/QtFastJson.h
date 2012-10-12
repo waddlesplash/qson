@@ -37,19 +37,32 @@ class QtFastJsonDoc : public QtFastJsonObject
     Q_OBJECT
 public:
     explicit QtFastJsonDoc(QObject *parent = 0);
+
     bool readFile(const QString filepath);
     bool readJSON(QIODevice *device);
     bool readJSON(const QString data);
+
+    bool writeFile(const QString filepath);
+    bool writeJSON(QIODevice *device);
+    QString writeJSON();
 
 private:
     bool parser_lexer();
     QString parser_readStr();
     QVariant parser_readNum();
+    bool parser_isIntBetter(int a0,int a1);
 
-    QChar json_curChar;
-    int json_loc;
-    int json_length;
-    QString jsonDat;
+    bool writer();
+    void writer_writeItem(QtFastJsonObject* i);
+    void writer_writeStr(QString str);
+    void writer_writeVar(QVariant var);
+
+    QChar parser_curchar;
+    int parser_loc;
+    int parser_length;
+    QString parser_data;
+
+    QString writer_data;
 };
 
 #endif // QTFASTJSON_H

@@ -30,10 +30,12 @@
 QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
     QtFastJsonObject(parent)
 {
-    json_curChar = ' ';
-    json_loc = 0;
-    json_length = 0;
-    jsonDat = "";
+    parser_curchar = ' ';
+    parser_loc = 0;
+    parser_length = 0;
+    parser_data = "";
+    writer_data = "";
+    setType(List);
 }
 
 bool QtFastJsonDoc::readFile(const QString filepath)
@@ -59,9 +61,9 @@ bool QtFastJsonDoc::readJSON(QIODevice* device)
 
 bool QtFastJsonDoc::readJSON(const QString data)
 {
-    jsonDat = data;
-    json_length = jsonDat.size();
-    if(json_length == 0) { return false; }
+    parser_data = data;
+    parser_length = parser_data.size();
+    if(parser_length == 0) { return false; }
 
     return parser_lexer();
 }
@@ -76,10 +78,10 @@ bool QtFastJsonDoc::parser_lexer()
     QString in = "";
     QString reading = "key";
 
-    for(json_loc = 0; json_loc < json_length;json_loc++) {
-        json_curChar = jsonDat[json_loc];
+    for(parser_loc = 0; parser_loc < parser_length;parser_loc++) {
+        parser_curchar = parser_data[parser_loc];
 
-        switch(json_curChar.toLatin1())
+        switch(parser_curchar.toLatin1())
         {
         case '{':
         {
@@ -146,12 +148,12 @@ bool QtFastJsonDoc::parser_lexer()
             break;
 
         case 't':
-            if((reading == "value") && (jsonDat.mid(json_loc,4) == "true"))
+            if((reading == "value") && (parser_data.mid(parser_loc,4) == "true"))
             {
                 newObj_Val = true;
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
                 newObj->setType(Variant);
-                json_loc += 3;
+                parser_loc += 3;
 
                 reading = "key";
                 newObj_Key = "";
@@ -161,12 +163,12 @@ bool QtFastJsonDoc::parser_lexer()
             break;
 
         case 'f':
-            if((reading == "value") && (jsonDat.mid(json_loc,5) == "false"))
+            if((reading == "value") && (parser_data.mid(parser_loc,5) == "false"))
             {
                 newObj_Val = false;
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
                 newObj->setType(Variant);
-                json_loc += 4;
+                parser_loc += 4;
 
                 reading = "key";
                 newObj_Key = "";
@@ -176,12 +178,12 @@ bool QtFastJsonDoc::parser_lexer()
             break;
 
         case 'n':
-            if((reading == "value") && (jsonDat.mid(json_loc,4) == "null"))
+            if((reading == "value") && (parser_data.mid(parser_loc,4) == "null"))
             {
                 QVariant nullVariant(QVariant::String);
                 newObj = curParent->addChild(newObj_Key,nullVariant);
                 newObj->setType(Variant);
-                json_loc += 3;
+                parser_loc += 3;
 
                 reading = "key";
                 newObj_Key = "";
@@ -218,7 +220,7 @@ bool QtFastJsonDoc::parser_lexer()
             break;
 
         default:
-            if(json_curChar.isDigit() && (reading == "value"))
+            if(parser_curchar.isDigit() && (reading == "value"))
             {
                 newObj_Val = parser_readNum();
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
@@ -228,7 +230,7 @@ bool QtFastJsonDoc::parser_lexer()
                 newObj_Key = "";
                 newObj_Val = "";
             }
-            else if(json_curChar.isDigit() && (reading == "array"))
+            else if(parser_curchar.isDigit() && (reading == "array"))
             {
                 QVariant newArrayVal = parser_readNum();
                 newObj = curParent->addChild(curParent->childCount(),newArrayVal);
@@ -241,17 +243,17 @@ bool QtFastJsonDoc::parser_lexer()
 }
 QString QtFastJsonDoc::parser_readStr()
 {
-    if(json_curChar != '"') { return ""; }
+    if(parser_curchar != '"') { return ""; }
 
     QString ret;
 
-    json_loc += 1;
+    parser_loc += 1;
     while(1)
     {
-        if(jsonDat[json_loc] == '\\')
+        if(parser_data[parser_loc] == '\\')
         {
-            json_loc += 1;
-            char cur = jsonDat[json_loc].toLatin1();
+            parser_loc += 1;
+            char cur = parser_data[parser_loc].toLatin1();
             switch(cur)
             { // as per http://www.json.org/
             case 'b':
@@ -270,42 +272,199 @@ QString QtFastJsonDoc::parser_readStr()
                 ret += "\t";
                 break;
             case 'u':
-                ret += QChar(jsonDat.mid(json_loc+1,4).toInt(0,16));
-                json_loc += 4;
+                ret += QChar(parser_data.mid(parser_loc+1,4).toInt(0,16));
+                parser_loc += 4;
                 break;
             default:
-                ret += jsonDat[json_loc];
+                ret += parser_data[parser_loc];
                 break;
             }
         }
-        else if(jsonDat[json_loc] == '"')
+        else if(parser_data[parser_loc] == '"')
         {
             return ret;
         }
         else
-        { ret += jsonDat[json_loc]; }
-        json_loc += 1;
+        { ret += parser_data[parser_loc]; }
+        parser_loc += 1;
     }
 
     return ret;
 }
-
 QVariant QtFastJsonDoc::parser_readNum()
 {
     QVariant ret;
     QString raw;
-    int addr = jsonDat.indexOf(',',json_loc);
-    if(addr == -1) { addr = jsonDat.indexOf(' ',json_loc); }
-    if(addr == -1) { addr = jsonDat.indexOf('\n',json_loc); }
-    if(addr == -1) { addr = jsonDat.indexOf('\r',json_loc); }
-    if(addr == -1) { addr = jsonDat.indexOf('}',json_loc); }
-    if(addr == -1) { addr = jsonDat.indexOf(']',json_loc); }
+    int addr2 = 0, addr = parser_data.indexOf(',',parser_loc);
+
+    addr2 = parser_data.indexOf(' ',parser_loc);
+    if(parser_isIntBetter(addr,addr2)) { addr = addr2; }
+
+    addr2 = parser_data.indexOf(' ',parser_loc);
+    if(parser_isIntBetter(addr,addr2)) { addr = addr2; }
+
+    addr2 = parser_data.indexOf('\n',parser_loc);
+    if(parser_isIntBetter(addr,addr2)) { addr = addr2; }
+
+    addr2 = parser_data.indexOf('\r',parser_loc);
+    if(parser_isIntBetter(addr,addr2)) { addr = addr2; }
+
+    addr2 = parser_data.indexOf(']',parser_loc);
+    if(parser_isIntBetter(addr,addr2)) { addr = addr2; }
+
+    addr2 = parser_data.indexOf('}',parser_loc);
+    if(parser_isIntBetter(addr,addr2)) { addr = addr2; }
     if(addr == -1) { return ""; }
 
-    raw = jsonDat.mid(json_loc,addr-json_loc);
-    ret = raw.toDouble();
+    raw = parser_data.mid(parser_loc,addr-parser_loc);
+    ret = raw.toDouble(); // TODO: locale handling
 
-    json_loc = addr;
+    parser_loc = addr;
 
     return ret;
+}
+bool QtFastJsonDoc::parser_isIntBetter(int a0, int a1)
+{
+    return (a1 != -1) && ((a1 < a0) || (a0 == -1));
+}
+
+bool QtFastJsonDoc::writeFile(const QString filepath)
+{
+    QFile f(filepath);
+    if(!f.open(QFile::WriteOnly)) { return false; }
+    bool result = writer();
+    if(result) { f.write(writer_data.toUtf8()); }
+    f.close();
+    return result;
+}
+
+bool QtFastJsonDoc::writeJSON(QIODevice* device)
+{
+    QIODevice::OpenMode o = device->openMode();
+    if((o == QIODevice::WriteOnly) || (o == QIODevice::ReadWrite))
+    {
+        bool result = writer();
+        if(result) { device->write(writer_data.toUtf8()); }
+        return result;
+    }
+    return false;
+}
+
+QString QtFastJsonDoc::writeJSON()
+{
+    writer();
+    return writer_data;
+}
+
+bool QtFastJsonDoc::writer()
+{
+    writer_data = "{";
+
+    QtFastJsonObject* o = 0;
+    foreach(o,this->getChildItems())
+    { writer_writeItem(o); }
+    writer_data += "}";
+    return true; // TODO: fail on bad cases, e.g. string writer
+}
+
+void QtFastJsonDoc::writer_writeItem(QtFastJsonObject* i)
+{
+    QtFastJsonObject* o = 0;
+
+    if(i->jsonParent()->type() != Array)
+    { writer_writeVar(i->key()); }
+
+    switch(i->type())
+    {
+    case List:
+        if(i->jsonParent()->type() != Array)
+        { writer_data += ":{"; }
+        else { writer_data += "{"; }
+
+        foreach(o,i->getChildItems())
+        { writer_writeItem(o); }
+
+        if(i->jsonParent()->getChildItems().last() != i)
+        { writer_data += "},"; }
+        else { writer_data += "}"; }
+        break;
+
+    case Array:
+        if(i->jsonParent()->type() != Array)
+        { writer_data += ":["; }
+        else { writer_data += "["; }
+
+        foreach(o,i->getChildItems())
+        { writer_writeItem(o); }
+
+        if(i->jsonParent()->getChildItems().last() != i)
+        { writer_data += "],"; }
+        else { writer_data += "]"; }
+        break;
+
+    case Variant:
+        if(i->jsonParent()->type() != Array)
+        { writer_data += ":"; }
+
+        writer_writeVar(i->variant()); // TODO: locale
+        if(i->jsonParent()->getChildItems().last() != i)
+        { writer_data += ","; }
+        break;
+
+    default:
+        break;
+    }
+}
+
+void QtFastJsonDoc::writer_writeStr(QString str)
+{
+    QString w = "\"";
+    for(int i = 0;i<str.size();i++)
+    {
+        switch(str[i].toLatin1())
+        {
+        case '"':
+            w += "\\\"";
+            break;
+
+        case '\\':
+            w += "\\\\";
+            break;
+
+        case '\b':
+            w += "\\b";
+            break;
+
+        case '\f':
+            w += "\\f";
+            break;
+
+        case '\t':
+            w += "\\t";
+            break;
+
+        default:
+            w += str[i];
+            break;
+        }
+    }
+    w += "\"";
+    writer_data += w;
+}
+
+void QtFastJsonDoc::writer_writeVar(QVariant var)
+{
+    if(!var.isNull())
+    {
+        switch(var.type())
+        {
+        case QVariant::String:
+            writer_writeStr(var.toString());
+            break;
+        default:
+            writer_data += var.toString();
+            break;
+        }
+    }
+    else { writer_data += "null"; }
 }
