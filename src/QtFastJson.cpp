@@ -104,7 +104,7 @@ bool QtFastJsonDoc::parser_lexer()
             if(in.endsWith('{') && !(in.size() == 1))
             {
                 in.chop(1);
-                curParent = curParent->jsonParent();
+                curParent = curParent->parent();
 
                 if(in.endsWith('['))
                 { reading = "array"; }
@@ -135,7 +135,7 @@ bool QtFastJsonDoc::parser_lexer()
             if(in.endsWith('['))
             {
                 in.chop(1);
-                curParent = curParent->jsonParent();
+                curParent = curParent->parent();
 
                 if(in.endsWith('['))
                 { reading = "array"; }
@@ -361,7 +361,7 @@ bool QtFastJsonDoc::writer()
     writer_data = "{";
 
     QtFastJsonObject* o = 0;
-    foreach(o,this->getChildItems())
+    foreach(o,this->children())
     { writer_writeItem(o); }
     writer_data += "}";
     return true; // TODO: fail on bad cases, e.g. string writer
@@ -371,43 +371,43 @@ void QtFastJsonDoc::writer_writeItem(QtFastJsonObject* i)
 {
     QtFastJsonObject* o = 0;
 
-    if(i->jsonParent()->type() != Array)
+    if(i->parent()->type() != Array)
     { writer_writeVar(i->key()); }
 
     switch(i->type())
     {
     case List:
-        if(i->jsonParent()->type() != Array)
+        if(i->parent()->type() != Array)
         { writer_data += ":{"; }
         else { writer_data += "{"; }
 
-        foreach(o,i->getChildItems())
+        foreach(o,i->children())
         { writer_writeItem(o); }
 
-        if(i->jsonParent()->getChildItems().last() != i)
+        if(i->parent()->children().last() != i)
         { writer_data += "},"; }
         else { writer_data += "}"; }
         break;
 
     case Array:
-        if(i->jsonParent()->type() != Array)
+        if(i->parent()->type() != Array)
         { writer_data += ":["; }
         else { writer_data += "["; }
 
-        foreach(o,i->getChildItems())
+        foreach(o,i->children())
         { writer_writeItem(o); }
 
-        if(i->jsonParent()->getChildItems().last() != i)
+        if(i->parent()->children().last() != i)
         { writer_data += "],"; }
         else { writer_data += "]"; }
         break;
 
     case Variant:
-        if(i->jsonParent()->type() != Array)
+        if(i->parent()->type() != Array)
         { writer_data += ":"; }
 
         writer_writeVar(i->variant()); // TODO: locale
-        if(i->jsonParent()->getChildItems().last() != i)
+        if(i->parent()->children().last() != i)
         { writer_data += ","; }
         break;
 

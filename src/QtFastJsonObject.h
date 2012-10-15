@@ -44,7 +44,7 @@ public:
 
     explicit QtFastJsonObject(QtFastJsonObject *parent = 0,QVariant key = "", bool isFJO = true);
     explicit QtFastJsonObject(QObject *parent = 0,QVariant key = "");
-    inline QtFastJsonObject* jsonParent() { return myParent; }
+    inline QtFastJsonObject* parent() { return myParent; }
 
     inline QtFastJsonObject* at(const QVariant key) { return childItems.value(key.toString()); }
 
@@ -57,7 +57,7 @@ public:
     void removeChild(QVariant key);
     void removeChild(QtFastJsonObject* object);
 
-    inline QList<QtFastJsonObject*> getChildItems() { return childItems_ordOfIns; }
+    inline QList<QtFastJsonObject*> children() { return childItems_ordOfIns; }
 
     inline int childCount() { return childItems.size(); }
 
