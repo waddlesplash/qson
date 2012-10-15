@@ -46,7 +46,7 @@ public:
     explicit QtFastJsonObject(QObject *parent = 0,QVariant key = "");
     inline QtFastJsonObject* jsonParent() { return myParent; }
 
-    inline QtFastJsonObject* at(const QVariant key) { return childItems->value(key.toString()); }
+    inline QtFastJsonObject* at(const QVariant key) { return childItems.value(key.toString()); }
 
     inline QVariant key() { return myKey; }
     inline void setKey(QVariant newKey) { myKey = newKey; }
@@ -59,7 +59,7 @@ public:
 
     inline QList<QtFastJsonObject*> getChildItems() { return childItems_ordOfIns; }
 
-    inline int childCount() { return childItems->size(); }
+    inline int childCount() { return childItems.size(); }
 
     /* The JsonValType indicates what type the value is: an array, map, or string. */
     inline JsonValType type() { return myValType; }
@@ -73,7 +73,7 @@ public:
     inline void setVariantValue(QVariant value) { myVariantValue = value; }
 
 private:
-    QHash<QString,QtFastJsonObject*>* childItems;
+    QHash<QString,QtFastJsonObject*> childItems;
     QList<QtFastJsonObject*> childItems_ordOfIns;
 
     QVariant myKey;

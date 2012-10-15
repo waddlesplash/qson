@@ -30,7 +30,6 @@ QtFastJsonObject::QtFastJsonObject(QObject *parent, QVariant key) :
     QObject(parent)
 {
     myKey = key;
-    childItems = new QHash<QString,QtFastJsonObject*>();
     myVariantValue = "";
 }
 QtFastJsonObject::QtFastJsonObject(QtFastJsonObject *parent, QVariant key, bool isFJO) :
@@ -38,7 +37,6 @@ QtFastJsonObject::QtFastJsonObject(QtFastJsonObject *parent, QVariant key, bool 
 {
     myKey = key;
     myParent = parent;
-    childItems = new QHash<QString,QtFastJsonObject*>();
     myVariantValue = "";
 }
 
@@ -47,7 +45,7 @@ QtFastJsonObject* QtFastJsonObject::addChild(QVariant key, QVariant value)
     QtFastJsonObject* newObj = new QtFastJsonObject(this,key,true);
     newObj->setVariantValue(value);
 
-    childItems->insert(key.toString(),newObj);
+    childItems.insert(key.toString(),newObj);
     childItems_ordOfIns.insert(childItems_ordOfIns.count(),newObj);
 
     return newObj;
@@ -55,12 +53,12 @@ QtFastJsonObject* QtFastJsonObject::addChild(QVariant key, QVariant value)
 
 void QtFastJsonObject::removeChild(QVariant key)
 {
-    QtFastJsonObject *objToRem = childItems->value(key.toString());
-    childItems->remove(key.toString());
+    QtFastJsonObject *objToRem = childItems.value(key.toString());
+    childItems.remove(key.toString());
     childItems_ordOfIns.removeOne(objToRem);
 }
 void QtFastJsonObject::removeChild(QtFastJsonObject *object)
 {
-    childItems->remove(childItems->key(object));
+    childItems.remove(childItems.key(object));
     childItems_ordOfIns.removeOne(object);
 }
