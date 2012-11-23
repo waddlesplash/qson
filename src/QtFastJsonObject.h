@@ -42,14 +42,14 @@ public:
         Variant = 2
     };
 
-    explicit QtFastJsonObject(QtFastJsonObject *parent = 0,QVariant key = "", bool isFJO = true);
     explicit QtFastJsonObject(QObject *parent = 0,QVariant key = "");
+    explicit QtFastJsonObject(QtFastJsonObject *parent = 0,QVariant key = "", bool isFJO = true);
     inline QtFastJsonObject* parent() { return myParent; }
 
     inline QtFastJsonObject* at(const QVariant key) { return childItems.value(key.toString()); }
 
     inline QVariant key() { return myKey; }
-    inline void setKey(QVariant newKey) { myKey = newKey; }
+    void setKey(QVariant newKey);
 
     /* Creates and adds a child item and then returns it. */
     QtFastJsonObject* addChild(QVariant key, QVariant value = "");
@@ -72,6 +72,7 @@ public:
     inline QVariant variant() { return myVariantValue; }
     inline void setVariantValue(QVariant value) { myVariantValue = value; }
 
+    void zDONTCALL_setChildKey(QtFastJsonObject* o, QVariant oldKey, QVariant newKey);
 private:
     QHash<QString,QtFastJsonObject*> childItems;
     QList<QtFastJsonObject*> childItems_ordOfIns;

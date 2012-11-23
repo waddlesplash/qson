@@ -36,8 +36,21 @@ QtFastJsonObject::QtFastJsonObject(QtFastJsonObject *parent, QVariant key, bool 
     QObject(parent)
 {
     myKey = key;
-    myParent = parent;
     myVariantValue = "";
+    if(!isFJO) { return; }
+    myParent = parent;
+}
+
+void QtFastJsonObject::setKey(QVariant newKey)
+{
+    myParent->zDONTCALL_setChildKey(this,myKey,newKey);
+    myKey = newKey;
+}
+
+void QtFastJsonObject::zDONTCALL_setChildKey(QtFastJsonObject* o, QVariant oldKey, QVariant newKey)
+{
+    childItems.remove(oldKey.toString());
+    childItems.insert(newKey.toString(),o);
 }
 
 QtFastJsonObject* QtFastJsonObject::addChild(QVariant key, QVariant value)
