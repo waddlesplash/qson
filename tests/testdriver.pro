@@ -1,5 +1,4 @@
-QT += core
-QT -= gui
+QT = core
 TEMPLATE = app
 TARGET = testdriver
 SOURCES += testdriver.cpp
