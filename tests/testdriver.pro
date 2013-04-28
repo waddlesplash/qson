@@ -1,0 +1,1 @@
+message("dummy qmake file!")

@@ -1,0 +1,5 @@
+compiler: gcc
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq libqt4-dev qmake
+script: qmake tests/testdriver.pro
