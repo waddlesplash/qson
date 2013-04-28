@@ -1,8 +1,8 @@
 /*
- * qtfastjsonExample (Main.cpp)
- *  Part of QtFastJSON (http://github.com/waddlesplash/qtfastjson/).
+ * qsonExample (Main.cpp)
+ *  Part of QSON (http://github.com/waddlesplash/qson/).
  *
- * Copyright (c) 2012 WaddleSplash
+ * Copyright (c) 2012-2013 WaddleSplash
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -24,14 +24,14 @@
  *
 */
 
-#include <QtFastJson.h>
+#include <Qson.h>
 #include <QCoreApplication>
 
 int main(int argc, char* argv[])
 {
     QCoreApplication app(argc,argv);
 
-    QtFastJsonDoc* jsonDoc = new QtFastJsonDoc();
+    QsonDoc* jsonDoc = new QsonDoc();
 
     if(jsonDoc->readFile(app.applicationDirPath() + "/../../testcases/qjson_example.json"))
     {

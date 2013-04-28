@@ -1,8 +1,8 @@
 /*
- * qtfastjson (QtFastJsonObject.cpp)
- *  Part of QtFastJSON (http://github.com/waddlesplash/qtfastjson/).
+ * qson (QsonObj.cpp)
+ *  Part of QSON (http://github.com/waddlesplash/qson/).
  *
- * Copyright (c) 2012 WaddleSplash
+ * Copyright (c) 2012-2013 WaddleSplash
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -24,15 +24,15 @@
  *
 */
 
-#include "QtFastJsonObject.h"
+#include "QsonObj.h"
 
-QtFastJsonObject::QtFastJsonObject(QObject *parent, QVariant key) :
+QsonObj::QsonObj(QObject *parent, QVariant key) :
     QObject(parent)
 {
     myKey = key;
     myVariantValue = "";
 }
-QtFastJsonObject::QtFastJsonObject(QtFastJsonObject *parent, QVariant key, bool isFJO) :
+QsonObj::QsonObj(QsonObj *parent, QVariant key, bool isFJO) :
     QObject(parent)
 {
     myKey = key;
@@ -41,21 +41,21 @@ QtFastJsonObject::QtFastJsonObject(QtFastJsonObject *parent, QVariant key, bool 
     myParent = parent;
 }
 
-void QtFastJsonObject::setKey(QVariant newKey)
+void QsonObj::setKey(QVariant newKey)
 {
     myParent->zDONTCALL_setChildKey(this,myKey,newKey);
     myKey = newKey;
 }
 
-void QtFastJsonObject::zDONTCALL_setChildKey(QtFastJsonObject* o, QVariant oldKey, QVariant newKey)
+void QsonObj::zDONTCALL_setChildKey(QsonObj* o, QVariant oldKey, QVariant newKey)
 {
     childItems.remove(oldKey.toString());
     childItems.insert(newKey.toString(),o);
 }
 
-QtFastJsonObject* QtFastJsonObject::addChild(QVariant key, QVariant value)
+QsonObj* QsonObj::addChild(QVariant key, QVariant value)
 {
-    QtFastJsonObject* newObj = new QtFastJsonObject(this,key,true);
+    QsonObj* newObj = new QsonObj(this,key,true);
     newObj->setVariantValue(value);
 
     childItems.insert(key.toString(),newObj);
@@ -64,13 +64,13 @@ QtFastJsonObject* QtFastJsonObject::addChild(QVariant key, QVariant value)
     return newObj;
 }
 
-void QtFastJsonObject::removeChild(QVariant key)
+void QsonObj::removeChild(QVariant key)
 {
-    QtFastJsonObject *objToRem = childItems.value(key.toString());
+    QsonObj *objToRem = childItems.value(key.toString());
     childItems.remove(key.toString());
     childItems_ordOfIns.removeOne(objToRem);
 }
-void QtFastJsonObject::removeChild(QtFastJsonObject *object)
+void QsonObj::removeChild(QsonObj *object)
 {
     childItems.remove(childItems.key(object));
     childItems_ordOfIns.removeOne(object);

@@ -1,8 +1,8 @@
 /*
- * qtfastjson (QtFastJsonObject.h)
- *  Part of QtFastJSON (http://github.com/waddlesplash/qtfastjson/).
+ * qson (QsonObj.h)
+ *  Part of QSON (http://github.com/waddlesplash/qson/).
  *
- * Copyright (c) 2012 WaddleSplash
+ * Copyright (c) 2012-2013 WaddleSplash
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -32,7 +32,7 @@
 #include <QHash>
 #include <QVariant>
 
-class QtFastJsonObject : public QObject
+class QsonObj : public QObject
 {
     Q_OBJECT
 public:
@@ -42,22 +42,22 @@ public:
         Variant = 2
     };
 
-    explicit QtFastJsonObject(QObject *parent = 0,QVariant key = "");
-    explicit QtFastJsonObject(QtFastJsonObject *parent = 0,QVariant key = "", bool isFJO = true);
-    inline QtFastJsonObject* parent() { return myParent; }
+    explicit QsonObj(QObject *parent = 0,QVariant key = "");
+    explicit QsonObj(QsonObj *parent = 0,QVariant key = "", bool isFJO = true);
+    inline QsonObj* parent() { return myParent; }
 
-    inline QtFastJsonObject* at(const QVariant key) { return childItems.value(key.toString()); }
+    inline QsonObj* at(const QVariant key) { return childItems.value(key.toString()); }
 
     inline QVariant key() { return myKey; }
     void setKey(QVariant newKey);
 
     /* Creates and adds a child item and then returns it. */
-    QtFastJsonObject* addChild(QVariant key, QVariant value = "");
+    QsonObj* addChild(QVariant key, QVariant value = "");
 
     void removeChild(QVariant key);
-    void removeChild(QtFastJsonObject* object);
+    void removeChild(QsonObj* object);
 
-    inline QList<QtFastJsonObject*> children() { return childItems_ordOfIns; }
+    inline QList<QsonObj*> children() { return childItems_ordOfIns; }
 
     inline int childCount() { return childItems.size(); }
 
@@ -72,16 +72,16 @@ public:
     inline QVariant variant() { return myVariantValue; }
     inline void setVariantValue(QVariant value) { myVariantValue = value; }
 
-    void zDONTCALL_setChildKey(QtFastJsonObject* o, QVariant oldKey, QVariant newKey);
+    void zDONTCALL_setChildKey(QsonObj* o, QVariant oldKey, QVariant newKey);
 private:
-    QHash<QString,QtFastJsonObject*> childItems;
-    QList<QtFastJsonObject*> childItems_ordOfIns;
+    QHash<QString,QsonObj*> childItems;
+    QList<QsonObj*> childItems_ordOfIns;
 
     QVariant myKey;
     QVariant myVariantValue;
     JsonValType myValType;
 
-    QtFastJsonObject* myParent;
+    QsonObj* myParent;
 };
 
 #endif // QTFASTJSONOBJECT_H

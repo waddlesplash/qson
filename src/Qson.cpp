@@ -1,8 +1,8 @@
 /*
- * qtfastjson (QtFastJson.cpp)
- *  Part of QtFastJSON (http://github.com/waddlesplash/qtfastjson/).
+ * qson (Qson.cpp)
+ *  Part of Qson (http://github.com/waddlesplash/qson/).
  *
- * Copyright (c) 2012 WaddleSplash
+ * Copyright (c) 2012-2013 WaddleSplash
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -25,10 +25,10 @@
 */
 
 #include <QFile>
-#include "QtFastJson.h"
+#include "Qson.h"
 
-QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
-    QtFastJsonObject(parent)
+QsonDoc::QsonDoc(QObject *parent) :
+    QsonObj(parent)
 {
     parser_curchar = ' ';
     parser_loc = 0;
@@ -38,7 +38,7 @@ QtFastJsonDoc::QtFastJsonDoc(QObject *parent) :
     setType(List);
 }
 
-bool QtFastJsonDoc::readFile(const QString filepath)
+bool QsonDoc::readFile(const QString filepath)
 {
     QFile f(filepath);
     if(!f.exists()) { return false; }
@@ -48,7 +48,7 @@ bool QtFastJsonDoc::readFile(const QString filepath)
     return result;
 }
 
-bool QtFastJsonDoc::readJSON(QIODevice* device)
+bool QsonDoc::readJSON(QIODevice* device)
 {
     QIODevice::OpenMode o = device->openMode();
     if((o == QIODevice::ReadOnly) || (o == QIODevice::ReadWrite))
@@ -59,7 +59,7 @@ bool QtFastJsonDoc::readJSON(QIODevice* device)
     return false;
 }
 
-bool QtFastJsonDoc::readJSON(const QString data)
+bool QsonDoc::readJSON(const QString data)
 {
     parser_data = data;
     parser_length = parser_data.size();
@@ -68,10 +68,10 @@ bool QtFastJsonDoc::readJSON(const QString data)
     return parser_lexer();
 }
 
-bool QtFastJsonDoc::parser_lexer()
+bool QsonDoc::parser_lexer()
 {
-    QtFastJsonObject* curParent = this;
-    QtFastJsonObject* newObj;
+    QsonObj* curParent = this;
+    QsonObj* newObj;
     QVariant newObj_Key;
     QVariant newObj_Val;
 
@@ -241,7 +241,7 @@ bool QtFastJsonDoc::parser_lexer()
     }
     return false;
 }
-QString QtFastJsonDoc::parser_readStr()
+QString QsonDoc::parser_readStr()
 {
     if(parser_curchar != '"') { return ""; }
 
@@ -291,7 +291,7 @@ QString QtFastJsonDoc::parser_readStr()
 
     return ret;
 }
-QVariant QtFastJsonDoc::parser_readNum()
+QVariant QsonDoc::parser_readNum()
 {
     QVariant ret;
     QString raw;
@@ -323,12 +323,12 @@ QVariant QtFastJsonDoc::parser_readNum()
 
     return ret;
 }
-bool QtFastJsonDoc::parser_isIntBetter(int a0, int a1)
+bool QsonDoc::parser_isIntBetter(int a0, int a1)
 {
     return (a1 != -1) && ((a1 < a0) || (a0 == -1));
 }
 
-bool QtFastJsonDoc::writeFile(const QString filepath)
+bool QsonDoc::writeFile(const QString filepath)
 {
     QFile f(filepath);
     if(!f.open(QFile::WriteOnly)) { return false; }
@@ -338,7 +338,7 @@ bool QtFastJsonDoc::writeFile(const QString filepath)
     return result;
 }
 
-bool QtFastJsonDoc::writeJSON(QIODevice* device)
+bool QsonDoc::writeJSON(QIODevice* device)
 {
     QIODevice::OpenMode o = device->openMode();
     if((o == QIODevice::WriteOnly) || (o == QIODevice::ReadWrite))
@@ -350,26 +350,26 @@ bool QtFastJsonDoc::writeJSON(QIODevice* device)
     return false;
 }
 
-QString QtFastJsonDoc::writeJSON()
+QString QsonDoc::writeJSON()
 {
     writer();
     return writer_data;
 }
 
-bool QtFastJsonDoc::writer()
+bool QsonDoc::writer()
 {
     writer_data = "{";
 
-    QtFastJsonObject* o = 0;
+    QsonObj* o = 0;
     foreach(o,this->children())
     { writer_writeItem(o); }
     writer_data += "}";
     return true; // TODO: fail on bad cases, e.g. string writer
 }
 
-void QtFastJsonDoc::writer_writeItem(QtFastJsonObject* i)
+void QsonDoc::writer_writeItem(QsonObj* i)
 {
-    QtFastJsonObject* o = 0;
+    QsonObj* o = 0;
 
     if(i->parent()->type() != Array)
     { writer_writeVar(i->key()); }
@@ -416,7 +416,7 @@ void QtFastJsonDoc::writer_writeItem(QtFastJsonObject* i)
     }
 }
 
-void QtFastJsonDoc::writer_writeStr(QString str)
+void QsonDoc::writer_writeStr(QString str)
 {
     QString w = "\"";
     for(int i = 0;i<str.size();i++)
@@ -452,7 +452,7 @@ void QtFastJsonDoc::writer_writeStr(QString str)
     writer_data += w;
 }
 
-void QtFastJsonDoc::writer_writeVar(QVariant var)
+void QsonDoc::writer_writeVar(QVariant var)
 {
     if(!var.isNull())
     {

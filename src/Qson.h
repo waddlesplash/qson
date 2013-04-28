@@ -1,8 +1,8 @@
 /*
- * qtfastjson (QtFastJson.h)
- *  Part of QtFastJSON (http://github.com/waddlesplash/qtfastjson/).
+ * qson (Qson.h)
+ *  Part of QSON (http://github.com/waddlesplash/qson/).
  *
- * Copyright (c) 2012 WaddleSplash
+ * Copyright (c) 2012-2013 WaddleSplash
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -24,19 +24,19 @@
  *
 */
 
-#ifndef QTFASTJSON_H
-#define QTFASTJSON_H
+#ifndef QSON_H
+#define QSON_H
 
 #include <QObject>
 #include <QString>
 #include <QIODevice>
-#include "QtFastJsonObject.h"
+#include "QsonObj.h"
 
-class QtFastJsonDoc : public QtFastJsonObject
+class QsonDoc : public QsonObj
 {
     Q_OBJECT
 public:
-    explicit QtFastJsonDoc(QObject *parent = 0);
+    explicit QsonDoc(QObject* parent = 0);
 
     bool readFile(const QString filepath);
     bool readJSON(QIODevice *device);
@@ -53,7 +53,7 @@ private:
     bool parser_isIntBetter(int a0,int a1);
 
     bool writer();
-    void writer_writeItem(QtFastJsonObject* i);
+    void writer_writeItem(QsonObj* i);
     void writer_writeStr(QString str);
     void writer_writeVar(QVariant var);
 
@@ -65,4 +65,4 @@ private:
     QString writer_data;
 };
 
-#endif // QTFASTJSON_H
+#endif // QSON_H
