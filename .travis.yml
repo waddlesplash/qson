@@ -6,5 +6,4 @@ before_install:
  - cd tests
  - qmake .
  - make
-script:
- - ./testdriver
+script: ./testdriver
