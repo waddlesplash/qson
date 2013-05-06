@@ -85,7 +85,7 @@ bool QsonDoc::parser_lexer()
         {
         case '{':
         {
-            in += "{";
+            //in += "{";
 
             if(in == "{") {
 #ifdef UNIT_TEST
