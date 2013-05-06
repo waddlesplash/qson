@@ -1,0 +1,11 @@
+BEGIN  OBJ KEY/VAL
+READ KEY  String "num1"
+READ VAL  Integr "88225"
+READ KEY  String "num2"
+READ VAL  Integr "92346"
+READ KEY  String "num3"
+READ VAL  Integr "812.86253"
+READ KEY  String "bool"
+READ  VALUE: true
+READ KEY  String "null"
+READ  VALUE: null
