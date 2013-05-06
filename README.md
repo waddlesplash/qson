@@ -1,4 +1,5 @@
 # QSON [![Build Status](https://travis-ci.org/waddlesplash/qson.png)](https://travis-ci.org/waddlesplash/qson)
+
 A fast way to manipulate JSON data from Qt. Under the MIT license.
 Both reading and writing are supported, but autoformatting the output is not.
 
