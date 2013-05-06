@@ -6,6 +6,10 @@
 
 #include <Qson.h>
 
+#ifndef UNIT_TEST
+#error "UNIT_TEST is not defined!"
+#endif
+
 QByteArray qFileGetContents(QString fileName)
 {
     QFile f(fileName);

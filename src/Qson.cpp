@@ -87,11 +87,17 @@ bool QsonDoc::parser_lexer()
         {
             in += "{";
 
-            if(in == "{")
-            { break; }
+            if(in == "{") {
+#ifdef UNIT_TEST
+    emit logEvent("BEGIN  OBJ KEY/VAL");
+#endif
+                break;
+            }
             else if(reading == "array")
             { newObj_Key = curParent->childCount(); }
-
+#ifdef UNIT_TEST
+    emit logEvent("BEGIN  OBJ  KEY: \""+newObj_Key.toString()+"\"");
+#endif
             curParent = curParent->addChild(newObj_Key);
             curParent->setType(List);
             newObj_Key = "";
@@ -105,7 +111,9 @@ bool QsonDoc::parser_lexer()
             {
                 in.chop(1);
                 curParent = curParent->parent();
-
+#ifdef UNIT_TEST
+    emit logEvent("END  OBJ KEY/VAL");
+#endif
                 if(in.endsWith('['))
                 { reading = "array"; }
                 else
@@ -123,7 +131,9 @@ bool QsonDoc::parser_lexer()
             in += "[";
             if(reading == "array")
             { newObj_Key = QString::number(curParent->childCount()); }
-
+#ifdef UNIT_TEST
+    emit logEvent("BEGIN ARRAY KEY: \""+newObj_Key.toString()+"\"");
+#endif
             curParent = curParent->addChild(newObj_Key);
             curParent->setType(Array);
             newObj_Key = "";
@@ -136,7 +146,9 @@ bool QsonDoc::parser_lexer()
             {
                 in.chop(1);
                 curParent = curParent->parent();
-
+#ifdef UNIT_TEST
+    emit logEvent("END  OBJ ARRAY");
+#endif
                 if(in.endsWith('['))
                 { reading = "array"; }
                 else
@@ -154,12 +166,14 @@ bool QsonDoc::parser_lexer()
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
                 newObj->setType(Variant);
                 parser_loc += 3;
-
+#ifdef UNIT_TEST
+    emit logEvent("READ  VALUE: true");
+#endif
                 reading = "key";
                 newObj_Key = "";
                 newObj_Val = "";
             }
-
+            // WARNING: stray "T"!
             break;
 
         case 'f':
@@ -169,12 +183,14 @@ bool QsonDoc::parser_lexer()
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
                 newObj->setType(Variant);
                 parser_loc += 4;
-
+#ifdef UNIT_TEST
+    emit logEvent("READ  VALUE: false");
+#endif
                 reading = "key";
                 newObj_Key = "";
                 newObj_Val = "";
             }
-
+            // WARNING: stray "F"!
             break;
 
         case 'n':
@@ -184,17 +200,22 @@ bool QsonDoc::parser_lexer()
                 newObj = curParent->addChild(newObj_Key,nullVariant);
                 newObj->setType(Variant);
                 parser_loc += 3;
-
+#ifdef UNIT_TEST
+    emit logEvent("READ  VALUE: null");
+#endif
                 reading = "key";
                 newObj_Key = "";
             }
-
+            // WARNING: stray "N"!
             break;
 
         case '"':
             if(reading == "value")
             {
                 newObj_Val = parser_readStr();
+#ifdef UNIT_TEST
+    emit logEvent("READ VAL  String \""+newObj_Val.toString()+"\"");
+#endif
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
                 newObj->setType(Variant);
 
@@ -205,10 +226,16 @@ bool QsonDoc::parser_lexer()
             else if(reading == "key")
             {
                 newObj_Key = parser_readStr();
+#ifdef UNIT_TEST
+    emit logEvent("READ KEY  String \""+newObj_Key.toString()+"\"");
+#endif
             }
             else if(reading == "array")
             {
                 QString newArrayVal = parser_readStr();
+#ifdef UNIT_TEST
+    emit logEvent("ARRAY VAL String \""+newArrayVal+"\"");
+#endif
                 newObj = curParent->addChild(curParent->childCount(),newArrayVal);
                 newObj->setType(Variant);
             }
@@ -223,6 +250,9 @@ bool QsonDoc::parser_lexer()
             if(parser_curchar.isDigit() && (reading == "value"))
             {
                 newObj_Val = parser_readNum();
+#ifdef UNIT_TEST
+    emit logEvent("READ VAL  Integr \""+newObj_Val.toString()+"\"");
+#endif
                 newObj = curParent->addChild(newObj_Key,newObj_Val);
                 newObj->setType(Variant);
 
@@ -233,6 +263,9 @@ bool QsonDoc::parser_lexer()
             else if(parser_curchar.isDigit() && (reading == "array"))
             {
                 QVariant newArrayVal = parser_readNum();
+#ifdef UNIT_TEST
+    emit logEvent("ARRAY VAL Integr \""+newArrayVal.toString()+"\"");
+#endif
                 newObj = curParent->addChild(curParent->childCount(),newArrayVal);
                 newObj->setType(Variant);
             }

@@ -46,6 +46,11 @@ public:
     bool writeJSON(QIODevice *device);
     QString writeJSON();
 
+#ifdef UNIT_TEST
+signals:
+    void logEvent(QString event);
+#endif
+
 private:
     bool parser_lexer();
     QString parser_readStr();
