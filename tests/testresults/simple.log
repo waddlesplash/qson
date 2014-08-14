@@ -1,13 +1,7 @@
-BEGIN  OBJ KEY/VAL
-READ KEY  String "val"
-READ VAL  String "1"
-READ KEY  String "val2"
-BEGIN ARRAY KEY: "val2"
-ARRAY VAL String "2"
-ARRAY VAL String "3"
-END  OBJ ARRAY
-READ KEY  String "val3"
-BEGIN  OBJ  KEY: "val3"
-READ KEY  String "test"
-READ VAL  String "test2"
-END  OBJ KEY/VAL
+Map: <root>
+	Variant: val, 1
+	Array: val2
+		Variant: 0, 2
+		Variant: 1, 3
+	Map: val3
+		Variant: test, test2

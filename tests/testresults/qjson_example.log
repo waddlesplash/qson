@@ -1,16 +1,9 @@
-BEGIN  OBJ KEY/VAL
-READ KEY  String "encoding"
-READ VAL  String "UTF-8"
-READ KEY  String "plug-ins"
-BEGIN ARRAY KEY: "plug-ins"
-ARRAY VAL String "python"
-ARRAY VAL String "c++"
-ARRAY VAL String "ruby"
-END  OBJ ARRAY
-READ KEY  String "indent"
-BEGIN  OBJ  KEY: "indent"
-READ KEY  String "length"
-READ VAL  Integr "3"
-READ KEY  String "use_space"
-READ  VALUE: true
-END  OBJ KEY/VAL
+Map: <root>
+	Variant: encoding, UTF-8
+	Array: plug-ins
+		Variant: 0, python
+		Variant: 1, c++
+		Variant: 2, ruby
+	Map: indent
+		Variant: length, 3
+		Variant: use_space, true

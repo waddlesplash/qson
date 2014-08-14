@@ -1,9 +1,7 @@
-BEGIN  OBJ KEY/VAL
-READ KEY  String "1"
-BEGIN ARRAY KEY: "1"
-ARRAY VAL Integr "2"
-ARRAY VAL Integr "3"
-BEGIN ARRAY KEY: "2"
-ARRAY VAL Integr "4"
-ARRAY VAL Integr "5"
-END  OBJ ARRAY
+Map: <root>
+	Array: 1
+		Variant: 0, 2
+		Variant: 1, 3
+		Array: 2
+			Variant: 0, 4
+			Variant: 1, 5
